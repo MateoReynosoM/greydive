@@ -5,7 +5,7 @@ import appFirebase from '../firebaseCredentials'
 import { getFirestore, collection, addDoc } from 'firebase/firestore' 
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
-/* import '../Styles/formData.css' */
+import './FormData.css'
 import Input from './Inputs'
 
 
@@ -14,17 +14,17 @@ const db = getFirestore(appFirebase)
 
 const FormSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, 'Muy corto!')
-    .max(50, 'Muy largo!')
-    .required('Requerido'),
+    .min(2, 'Muy corto!*')
+    .max(50, 'Muy largo!*')
+    .required('Requerido*'),
   selectOption: Yup.string()
-    .required('Seleccione una opcion'),
+    .required('Seleccione una opcion*'),
   date: Yup.string()
-    .required('Requerido'),
+    .required('Requerido*'),
   email: Yup.string()
-    .email("Ingrese un email valido")
-    .required('Requerido'),
-  checkbox: Yup.boolean().default(false).required('Requerido')
+    .email("Ingrese un email valido*")
+    .required('Requerido*'),
+  checkbox: Yup.boolean().default(false).required('Requerido*')
 })
 console.log(ErrorMessage);
 
@@ -97,9 +97,15 @@ const FormData = () => {
 
    
 
-  const renderError = (message) => <p className="help is-danger">{message}</p>;
+  const renderError = (message) => <p className="error">{message}</p>;
   
   return (
+    <div className='todo'>
+      <div className='header'>
+        <h1 className='header-cosas'>Greydive - Challenge</h1>
+        <h3 className='header-cosas'>Mateo Reynoso</h3>
+      </div>
+    <div className='container'>
     <Formik
       initialValues={{ name: '',email:"", selectOption: '', date: '', checkbox: false }}
       validationSchema={FormSchema}
@@ -108,13 +114,13 @@ const FormData = () => {
         resetForm();
       }}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, isValid }) => (
         <Form>
           <Input
           type='text'
           name='name'
           placeholder='Nombre completo'
-          className='name'
+          className='inputcss'
           render={renderError}
           />
 
@@ -122,7 +128,7 @@ const FormData = () => {
           type='email'
           name='email'
           placeholder='Email'
-          className='email'
+          className='inputcss'
           render={renderError}
           /> 
 
@@ -135,34 +141,43 @@ const FormData = () => {
           />
 
 
-        <div>
-          <Field as="select" name="selectOption">
-          <option value={'default'}>Selecciona tu país</option>
+        <div >
+          <Field as="select"  name="selectOption" className="selectasd">
+          <option  value={'default'}>Selecciona tu país</option>
             {itemsMap}            
           </Field>
           <ErrorMessage
           name='selectOption'
           render={renderError}
+          
           />
         </div>
-
+        <div className='checkbox'>
           <input type="checkbox" value={click} onChange={handleCheckbox} />
           <label htmlFor="checkbox">
             Acepto los terminos y condiciones 
           </label>
-          {
-            click &&
+        </div> 
+        {
+          click &&
           <button 
           type="submit" 
-          disabled={isSubmitting}
+          class='arrow-wrapper'
+          disabled={isSubmitting || !isValid}
           onClick={handleRedirect}
           >
-            Submit
+            Enviar
+            <div class="arrow-wrapper">
+        <div class="arrow"></div>
+
+    </div>
           </button> 
-          }
+        }    
         </Form>
       )}
     </Formik>
+    </div>
+    </div>
   )
 }
 
