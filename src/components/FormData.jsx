@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import items from '../data/json.Data'
+import items from '../data/jsonData'
 import { useNavigate } from 'react-router-dom'
 import appFirebase from '../firebaseCredentials'
 import { getFirestore, collection, addDoc } from 'firebase/firestore' 
